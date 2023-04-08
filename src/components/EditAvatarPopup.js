@@ -16,9 +16,15 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, onLoading }) {
   }
 
   return (
-    <PopupWithForm isOpen={isOpen} onClose={onClose} onSubmit={handleSubmit} name="new-avatar" title="Обновить аватар" buttonText={onLoading ? "Сохранение..." : "Сохранить"}>
-      <input id="avatar" name="link" className="popup__field popup__field_type_src" placeholder="Ссылка на аватар" autoComplete="off" type="url" required ref={avaRef} />
-      <span id="avatar-error" className="popup__error popup__error_active"></span>
+    <PopupWithForm 
+      isOpen={isOpen} 
+      onClose={onClose} 
+      onSubmit={handleSubmit} 
+      name="new-avatar" 
+      title="Обновить аватар" 
+      buttonText={onLoading ? "Сохранение..." : "Сохранить"}>
+        <input id="avatar" name="link" className="popup__field popup__field_type_src" placeholder="Ссылка на аватар" autoComplete="off" type="url" required ref={avaRef} />
+        <span id="avatar-error" className="popup__error popup__error_active"></span>
     </PopupWithForm>
   );
 }

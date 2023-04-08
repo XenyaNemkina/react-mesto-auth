@@ -24,11 +24,17 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, onLoading }) {
   }
 
   return (
-    <PopupWithForm isOpen={isOpen} onClose={onClose} onSubmit={handleSubmit} name="new-card" title="Новое место" buttonText={onLoading ? "Сохранение..." : "Создать"}>
-      <input id="new-card-name" type="text" name="name" className="popup__field popup__field_type_name" placeholder="Название" autoComplete="off" minLength="2" maxLength="30" required value={name || ""} onChange={handleSetName} />
-      <span id="new-card-name-error" className="popup__error popup__error_active"></span>
-      <input id="new-card-src" name="link" className="popup__field popup__field_type_src" placeholder="Ссылка на картинку" autoComplete="off" type="url" required value={link || ""} onChange={handleSetLink} />
-      <span id="new-card-src-error" className="popup__error popup__error_active"></span>
+    <PopupWithForm 
+      isOpen={isOpen} 
+      onClose={onClose} 
+      onSubmit={handleSubmit} 
+      name="new-card" 
+      title="Новое место" 
+      buttonText={onLoading ? "Сохранение..." : "Создать"}>
+        <input id="new-card-name" type="text" name="name" className="popup__field popup__field_type_name" placeholder="Название" autoComplete="off" minLength="2" maxLength="30" required value={name || ""} onChange={handleSetName} />
+        <span id="new-card-name-error" className="popup__error popup__error_active"></span>
+        <input id="new-card-src" name="link" className="popup__field popup__field_type_src" placeholder="Ссылка на картинку" autoComplete="off" type="url" required value={link || ""} onChange={handleSetLink} />
+        <span id="new-card-src-error" className="popup__error popup__error_active"></span>
     </PopupWithForm>
   );
 }

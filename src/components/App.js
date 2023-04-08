@@ -22,9 +22,9 @@ function App() {
   const [selectedCard, setSelectedCard] = React.useState({});
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = useState([]);
-  const [isEditAvatarPopupOnLoading, setEditAvatarPopupButtonText] = useState(false);
-  const [isEditProfilePopupOnLoading, setEditProfilePopupButtonText] = useState(false);
-  const [isAddPlacePopupOnLoading, setAddPlacePopupButtonText] = useState(false);
+  const [isEditAvatarPopupOnLoading, setIsEditAvatarPopupOnLoading] = useState(false);
+  const [isEditProfilePopupOnLoading, setIsEditProfilePopupOnLoading] = useState(false);
+  const [isAddPlacePopupOnLoading, setIsAddPlacePopupOnLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [infoMessage, setInfoMessage] = React.useState(null);
@@ -62,16 +62,6 @@ function App() {
         });
   }, [isLoggedIn]);
 
-  useEffect(() => {
-    function handleEscClose(evt) {
-      if (evt.key === "Escape") {
-        closeAllPopups();
-      }
-    }
-    window.addEventListener("keydown", handleEscClose);
-    return () => window.removeEventListener("keydown", handleEscClose);
-  }, []);
-
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
     api
@@ -96,7 +86,7 @@ function App() {
   }
 
   function handleUpdateUser(userData) {
-    setEditProfilePopupButtonText(true);
+    setIsEditProfilePopupOnLoading(true);
     api
       .setUserInfo(userData)
       .then((data) => {
@@ -107,12 +97,12 @@ function App() {
         console.log(err);
       })
       .finally(() => {
-        setEditProfilePopupButtonText(false);
+        setIsEditProfilePopupOnLoading(false);
       });
   }
 
   function handleUpdateAvatar(avatar) {
-    setEditAvatarPopupButtonText(true);
+    setIsEditAvatarPopupOnLoading(true);
     api
       .editAvatar(avatar)
       .then((newUserInfo) => {
@@ -123,12 +113,12 @@ function App() {
         console.log(err);
       })
       .finally(() => {
-        setEditAvatarPopupButtonText(false);
+        setIsEditAvatarPopupOnLoading(false);
       });
   }
 
   function handleAddPlace(data) {
-    setAddPlacePopupButtonText(true);
+    setIsAddPlacePopupOnLoading(true);
     api
       .addCard(data)
       .then((newCard) => {
@@ -139,7 +129,7 @@ function App() {
         console.log(err);
       })
       .finally(() => {
-        setAddPlacePopupButtonText(false);
+        setIsAddPlacePopupOnLoading(false);
       });
   }
 
@@ -173,12 +163,12 @@ function App() {
   return (
     <div style={{ backgroundColor: "black", minHeight: "100vh" }}>
       <CurrentUserContext.Provider value={currentUser}>
+        <Header title="Выйти" route="*" email={email} onLogout={handleLogout} />
         <Routes>
           <Route
             path="/"
             element={
-              <ProtectedRoute isLoggiedIn={isLoggedIn}>
-                <Header title="Выйти" email={email} onLogout={handleLogout} />
+              <ProtectedRoute isLoggedIn={isLoggedIn}>
                 <Main
                   cards={cards}
                   onEditProfile={handleEditProfileClick}
@@ -194,13 +184,31 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/sign-in" element={<Login handleLogin={handleLogin} handleShowInfoMessage={handleShowInfoMessage} email={email} />} />
-          <Route path="/sign-up" element={<Register handleShowInfoMessage={handleShowInfoMessage} />} />
+          <Route path="/sign-in" element={
+            <Login
+              handleLogin={handleLogin}
+              handleShowInfoMessage={handleShowInfoMessage}
+              email={email} />} />
+          <Route path="/sign-up" element={
+            <Register
+              handleShowInfoMessage={handleShowInfoMessage} />} />
           <Route path="*" element={isLoggedIn ? <Navigate to="/" /> : <Navigate to="/sign-in" />} />
         </Routes>
-        <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} onLoading={isEditProfilePopupOnLoading} />
-        <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlace} onLoading={isAddPlacePopupOnLoading} />
-        <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} onLoading={isEditAvatarPopupOnLoading} />
+        <EditProfilePopup
+          isOpen={isEditProfilePopupOpen} 
+          onClose={closeAllPopups} 
+          onUpdateUser={handleUpdateUser} 
+          onLoading={isEditProfilePopupOnLoading} />
+        <AddPlacePopup
+          isOpen={isAddPlacePopupOpen} 
+          onClose={closeAllPopups} 
+          onAddPlace={handleAddPlace} 
+          onLoading={isAddPlacePopupOnLoading} />
+        <EditAvatarPopup
+          isOpen={isEditAvatarPopupOpen}
+          onClose={closeAllPopups} 
+          onUpdateAvatar={handleUpdateAvatar} 
+          onLoading={isEditAvatarPopupOnLoading} />
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
         <InfoToolTip message={infoMessage} onClose={closeAllPopups} />
       </CurrentUserContext.Provider>

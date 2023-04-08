@@ -26,11 +26,17 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, onLoading }) {
   }
 
   return (
-    <PopupWithForm isOpen={isOpen} onClose={onClose} onSubmit={handleSubmit} name="profile" title="Редактировать профиль" buttonText={onLoading ? "Сохранение..." : "Сохранить"}>
-      <input id="name" type="text" name="name" className="popup__field popup__field_type_nickname" placeholder="Имя" autoComplete="off" minLength="2" maxLength="40" required value={name || ""} onChange={handleName} />
-      <span id="name-error" className="popup__error popup__error_active"></span>
-      <input id="prof" type="text" name="about" className="popup__field popup__field_type_prof" placeholder="О себе" autoComplete="off" minLength="2" maxLength="200" required value={description || ""} onChange={handleDescription} />
-      <span id="prof-error" className="popup__error popup__error_active"></span>
+    <PopupWithForm 
+      isOpen={isOpen} 
+      onClose={onClose} 
+      onSubmit={handleSubmit} 
+      name="profile" 
+      title="Редактировать профиль" 
+      buttonText={onLoading ? "Сохранение..." : "Сохранить"}>
+        <input id="name" type="text" name="name" className="popup__field popup__field_type_nickname" placeholder="Имя" autoComplete="off" minLength="2" maxLength="40" required value={name || ""} onChange={handleName} />
+        <span id="name-error" className="popup__error popup__error_active"></span>
+        <input id="prof" type="text" name="about" className="popup__field popup__field_type_prof" placeholder="О себе" autoComplete="off" minLength="2" maxLength="200" required value={description || ""} onChange={handleDescription} />
+        <span id="prof-error" className="popup__error popup__error_active"></span>
     </PopupWithForm>
   );
 }

@@ -4,9 +4,10 @@ class Auth {
   }
 
   _getResponseData(res) {
-    return res.json().then((res) => {
-      throw new Error(res.message);
-    });
+    if (!res.ok) {
+      return Promise.reject(`Ошибка: ${res.status}`);
+    }
+    return res.json();
   }
 
   register({ email, password }) {
@@ -20,10 +21,7 @@ class Auth {
         email,
         password,
       }),
-    }).then((response) => {
-      if (response.ok) return response.json();
-      return this._getResponseData(response);
-    });
+    }).then(this._getResponseData);
   }
 
   authorization({ email, password }) {
@@ -37,10 +35,7 @@ class Auth {
         email,
         password,
       }),
-    }).then((response) => {
-      if (response.ok) return response.json();
-      return this._getResponseData(response);
-    });
+    }).then(this._getResponseData);
   }
 
   getContent(token) {
@@ -52,7 +47,7 @@ class Auth {
         "Content-Type": "application/json",
       },
     })
-      .then((res) => res.json())
+      .then(this._getResponseData)
       .then((data) => data);
   }
 }

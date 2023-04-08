@@ -19,7 +19,7 @@ function Card({ card, onCardClick, onCardDelete, onCardLike }) {
   }
 
   return (
-    <div className="element-template" key={card.id}>
+    <div className="element-template">
       <li className="element">
         <img className="element__img" src={card.link} alt={card.name} onClick={handleCardClick} />
         <div className="element__title">

@@ -1,4 +1,16 @@
+import React from "react";
+
 function InfoToolTip({ message, onClose }) {
+  React.useEffect(() => {
+    function handleEscClose(evt) {
+      if (evt.key === "Escape") {
+        onClose();
+      }
+    }
+    window.addEventListener("keydown", handleEscClose);
+    return () => window.removeEventListener("keydown", handleEscClose);
+  }, []);
+
   return (
     <div className={"popup " + (message ? "popup_is-opened" : "")}>
       <div className="popup__container">
