@@ -21,7 +21,7 @@ const Register = ({ handleShowInfoMessage }) => {
     evt.preventDefault();
     auth
       .register(formValue)
-      .then((res) => {
+      .then(() => {
         handleShowInfoMessage({
           text: "Вы успешно зарегистрировались!",
           isSuccess: true,
