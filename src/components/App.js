@@ -20,7 +20,7 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({});
-  const [isInfoTooltipOpen, setIsInfoTooltipOpen] =React.useState({});
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] =React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = useState([]);
   const [isEditAvatarPopupOnLoading, setIsEditAvatarPopupOnLoading] = useState(false);
@@ -136,6 +136,7 @@ function App() {
   }
 
   function handleShowInfoMessage(message) {
+    setIsInfoTooltipOpen(true);
     setInfoMessage(message);
   }
 
@@ -211,7 +212,7 @@ function App() {
           onClose={closeAllPopups} 
           onUpdateAvatar={handleUpdateAvatar} 
           onLoading={isEditAvatarPopupOnLoading} />
-        <ImagePopup card={selectedCard} isOpen={handleCardClick} onClose={closeAllPopups} />
+        <ImagePopup card={selectedCard} onClose={closeAllPopups} />
         <InfoToolTip isOpen={isInfoTooltipOpen} message={infoMessage} onClose={closeAllPopups} />
       </CurrentUserContext.Provider>
     </div>
