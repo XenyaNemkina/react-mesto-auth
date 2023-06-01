@@ -10,7 +10,8 @@ function InfoToolTip({ message, isOpen, onClose }) {
     if (isOpen) {
       window.addEventListener("keydown", handleEscClose);
       return () => window.removeEventListener("keydown", handleEscClose);
-    }},[isOpen, onClose]);
+    }
+  },[isOpen, onClose]);
   
 
   return (

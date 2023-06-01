@@ -22,6 +22,7 @@ class Api {
   //добавление информации о пользователе
   setUserInfo({ name, about }) {
     return fetch(`${this._baseUrl}/users/me`, {
+      credentials: "include",
       method: "PATCH",
       headers: this._headers,
       body: JSON.stringify({
@@ -34,6 +35,7 @@ class Api {
   //сменить аватар
   editAvatar(data) {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
+      credentials: "include",
       method: "PATCH",
       headers: this._headers,
       body: JSON.stringify({
@@ -55,6 +57,7 @@ class Api {
 
   deleteCard(cardId) {
     return fetch(`${this._baseUrl}/cards/` + cardId, {
+      credentials: "include",
       method: "DELETE",
       headers: this._headers,
     }).then(this._getResponseData);
@@ -63,11 +66,13 @@ class Api {
   changeLikeCardStatus(cardId, isLiked) {
     if (isLiked) {
       return fetch(`${this._baseUrl}/cards/` + cardId + "/likes", {
+        credentials: "include",
         method: "DELETE",
         headers: this._headers,
       }).then(this._getResponseData);
     } else {
       return fetch(`${this._baseUrl}/cards/` + cardId + "/likes", {
+        credentials: "include",
         method: "PUT",
         headers: this._headers,
       }).then(this._getResponseData);
@@ -76,10 +81,9 @@ class Api {
 }
 
 const api = new Api({
-  baseUrl: "https://mesto.nomoreparties.co/v1/cohort-59",
+  baseUrl: "http://mesto.xenyanemkina.nomoredomains.rocks/",
   headers: {
-    authorization: "a7661955-a700-47ad-9b00-f16ac56ab61c",
-    "Content-Type": "application/json",
+     "Content-Type": "application/json",
   },
 });
 

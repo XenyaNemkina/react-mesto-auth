@@ -13,22 +13,21 @@ class Auth {
   register({ email, password }) {
     return fetch(`${this._baseUrl}/signup`, {
       method: "POST",
+      credentials: 'include',
       headers: {
-        Accept: "application/json",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         email,
         password,
       }),
-    }).then(this._getResponseData);
+    }).then(this._getResponseData)
   }
 
   authorization({ email, password }) {
     return fetch(`${this._baseUrl}/signin`, {
       method: "POST",
       headers: {
-        Accept: "application/json",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -42,7 +41,6 @@ class Auth {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "GET",
       headers: {
-        Accept: "application/json",
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
@@ -53,7 +51,7 @@ class Auth {
 }
 
 const auth = new Auth({
-  baseUrl: "https://auth.nomoreparties.co",
+  baseUrl: "http://mesto.xenyanemkina.nomoredomains.rocks/",
 });
 
 export default auth;
