@@ -10,34 +10,40 @@ class Auth {
     return res.json();
   }
 
-  register({ email, password }) {
+  register(email, password) {
     return fetch(`${this._baseUrl}/signup`, {
-      method: "POST",
-      credentials: 'include',
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    }).then(this._getResponseData)
+      body: JSON.stringify({ email, password}),
+    })
+    .then(res => this._getResponseData(res))
+    .then((res) => {
+      return res;
+    })
   }
 
-  authorization({ email, password }) {
+  authorization(email, password) {
     return fetch(`${this._baseUrl}/signin`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    }).then(this._getResponseData);
+      body: JSON.stringify({ email,password})
+    })
+    .then(res => this._getResponseData(res))
+    .then((data) => {
+      if (data.token){
+        localStorage.setItem('token', data.token);
+        return data;
+      }
+    })
   }
 
-  getContent(token) {
+  checkToken(token) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "GET",
       headers: {
@@ -45,13 +51,13 @@ class Auth {
         "Content-Type": "application/json",
       },
     })
-      .then(this._getResponseData)
+    .then(res => this._getResponseData(res))
       .then((data) => data);
   }
 }
 
 const auth = new Auth({
-  baseUrl: "http://mesto.xenyanemkina.nomoredomains.rocks/",
+  baseUrl: "http://localhost:3000",
 });
 
 export default auth;

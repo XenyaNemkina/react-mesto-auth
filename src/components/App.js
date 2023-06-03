@@ -53,7 +53,14 @@ function App() {
   };
 
   useEffect(() => {
-    isLoggedIn &&
+     const token = localStorage.getItem("token");
+     if(token && !isLoggedIn) {
+      handleTokenCheck(token);
+    };
+  }, []);
+
+    useEffect(() => {
+    if (isLoggedIn)
       Promise.all([api.getUserInfo(), api.getInitialCards()])
         .then(([userData, data]) => {
           setCurrentUser(userData);
@@ -63,6 +70,51 @@ function App() {
           console.log(err);
         });
   }, [isLoggedIn]);
+
+  const handleTokenCheck = (token) => {
+    auth.checkToken(token)
+      .then((data) => {
+        setEmail(data.email);
+        setIsLoggedIn(true);
+        navigate('/', {replace: true});
+      })
+      .catch((err) =>{
+        console.log(err)
+      })
+  }
+
+  function handleLogin(email, password) {
+    return auth.authorization(email, password)
+      .then((data) => {
+        localStorage.setItem('token', data.token);
+        setEmail(data.email);
+        setIsLoggedIn(true);
+        navigate('/', {replace: true})
+        }
+      )
+      .catch((err) => {
+        handleShowInfoMessage({
+          text: err.message || "Что-то пошло не так! Попробуйте еще раз.",
+          isSuccess: false,
+        });
+      })}
+
+      function handleRegister(email, password) {
+        return auth.register(email, password)
+          .then(()=> {
+            handleShowInfoMessage({
+              text: "Вы успешно зарегистрировались!",
+              isSuccess: true,
+            });
+            navigate("/signin", { replace: true });
+          })
+          .catch((err) => {
+            handleShowInfoMessage({
+              text: err.message || "Что-то пошло не так! Попробуйте еще раз.",
+              isSuccess: false,
+          })
+        });
+      }
 
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
@@ -140,24 +192,6 @@ function App() {
     setInfoMessage(message);
   }
 
-  React.useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      auth
-        .getContent(token)
-        .then((res) => {
-          setEmail(res.data.email);
-          handleLogin();
-          navigate("/", { replace: true });
-        })
-        .catch((err) => console.log(err));
-    }
-  }, [navigate]);
-
-  function handleLogin() {
-    setIsLoggedIn(true);
-  }
-
   function handleLogout() {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
@@ -188,13 +222,9 @@ function App() {
             }
           />
           <Route path="/sign-in" element={
-            <Login
-              handleLogin={handleLogin}
-              handleShowInfoMessage={handleShowInfoMessage}
-              email={email} />} />
-          <Route path="/sign-up" element={
-            <Register
-              handleShowInfoMessage={handleShowInfoMessage} />} />
+            isLoggedIn? <Navigate to='/'/> : <Login onSubmit = {handleLogin}/>} />
+          <Route path="/sign-up" element=
+           {isLoggedIn? <Navigate to='/'/> : <Register onSubmit={handleRegister}/>} />
           <Route path="*" element={isLoggedIn ? <Navigate to="/" /> : <Navigate to="/sign-in" />} />
         </Routes>
         <EditProfilePopup

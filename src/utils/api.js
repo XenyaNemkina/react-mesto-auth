@@ -4,6 +4,12 @@ class Api {
     this._headers = options.headers;
   }
 
+  _checkHeaders = () => {
+    this._token = localStorage.getItem('token');
+    this._headers.authorization = `Bearer ${this._token}`;
+    return this._headers;
+  };
+
   _getResponseData(res) {
     if (!res.ok) {
       return Promise.reject(`Ошибка: ${res.status}`);
@@ -12,11 +18,15 @@ class Api {
   }
 
   getUserInfo() {
-    return fetch(`${this._baseUrl}/users/me`, { headers: this._headers }).then(this._getResponseData);
+    return fetch(`${this._baseUrl}/users/me`,
+    {headers: this._checkHeaders()})
+    .then(this._getResponseData);
   }
 
   getInitialCards() {
-    return fetch(`${this._baseUrl}/cards`, { headers: this._headers }).then(this._getResponseData);
+    return fetch(`${this._baseUrl}/cards`, 
+    {headers: this._checkHeaders()})
+    .then(this._getResponseData);
   }
 
   //добавление информации о пользователе
@@ -81,9 +91,10 @@ class Api {
 }
 
 const api = new Api({
-  baseUrl: "http://mesto.xenyanemkina.nomoredomains.rocks/",
+  baseUrl: "http://localhost:3000",
   headers: {
      "Content-Type": "application/json",
+     "Accept": "application/json",
   },
 });
 

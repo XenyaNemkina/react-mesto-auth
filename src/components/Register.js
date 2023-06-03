@@ -1,13 +1,11 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import auth from "../utils/auth.js";
+import { Link } from "react-router-dom";
 
-const Register = ({ handleShowInfoMessage }) => {
+const Register = ({ onSubmit }) => {
   const [formValue, setFormValue] = React.useState({
     email: "",
     password: "",
   });
-  const navigate = useNavigate();
 
   const handleChange = (evt) => {
     const { name, value } = evt.target;
@@ -17,23 +15,16 @@ const Register = ({ handleShowInfoMessage }) => {
     });
   };
 
-  const handleSubmit = (evt) => {
+  const handleSubmitRegister = (evt) => {
     evt.preventDefault();
-    auth
-      .register(formValue)
-      .then(() => {
-        handleShowInfoMessage({
-          text: "Вы успешно зарегистрировались!",
-          isSuccess: true,
-        });
-        navigate("/signin", { replace: true });
-      })
-      .catch((err) => {
-        handleShowInfoMessage({
-          text: err.message || "Что-то пошло не так! Попробуйте еще раз.",
-          isSuccess: false,
-        });
-      });
+    if(!formValue.email || !formValue.password) {
+      return;
+    }
+    onSubmit(formValue.email , formValue.password);
+    setFormValue({
+      email:'', 
+      password: ''
+    })
   };
 
   return (
@@ -41,12 +32,12 @@ const Register = ({ handleShowInfoMessage }) => {
       <section className="auth">
         <div className="auth__container">
           <h2 className="auth__title">Регистрация</h2>
-          <form className="auth__form" onSubmit={handleSubmit}>
+          <form className="auth__form" onSubmit={handleSubmitRegister}>
             <input className="popup__field auth__field" type="email" name="email" placeholder="Email" minLength="2" autoComplete="off" value={formValue.email} onChange={handleChange} required />
             <span className="popup__error popup__error_active"></span>
             <input className="popup__field auth__field" type="password" name="password" placeholder="Пароль" minLength="2" autoComplete="off" value={formValue.password} onChange={handleChange} required />
             <span className="popup__error popup__error_active"></span>
-            <button type="submit" onSubmit={handleSubmit} className="popup__save popup__save_auth-button">
+            <button type="submit" onSubmit={handleSubmitRegister} className="popup__save popup__save_auth-button">
               Зарегистрироваться
             </button>
             <p className="auth__text">

@@ -10,7 +10,7 @@ function PopupWithForm({ onSubmit, ...props }) {
     if (props.isOpen) {
     window.addEventListener("keydown", handleEscClose);
     return () => window.removeEventListener("keydown", handleEscClose);
-  }}, [props.isOpen, props.onClose]);
+  }}, [props, props.isOpen, props.onClose]);
 
   return (
     <section className={`popup popup_type_${props.name} ${props.isOpen ? "popup_is-opened" : ""}`}>
